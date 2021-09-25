@@ -41,6 +41,19 @@ impl<T: Encode + ?Sized> Encode for alloc::boxed::Box<T> {
     }
 }
 
+#[cfg(feature = "alloc")]
+impl<T: Encode + ?Sized> Encode for alloc::rc::Rc<T> {
+    fn encode<W: Write>(&self, e: &mut Encoder<W>) -> Result<(), Error<W::Error>> {
+        (**self).encode(e)
+    }
+}
+
+impl<T: Encode + ?Sized> Encode for core::cell::RefCell<T> {
+    fn encode<W: Write>(&self, e: &mut Encoder<W>) -> Result<(), Error<W::Error>> {
+        self.borrow().encode(e)
+    }
+}
+
 impl Encode for str {
     fn encode<W: Write>(&self, e: &mut Encoder<W>) -> Result<(), Error<W::Error>> {
         e.str(self)?.ok()

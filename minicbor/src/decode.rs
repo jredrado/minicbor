@@ -28,6 +28,20 @@ impl<'b, T: Decode<'b>> Decode<'b> for alloc::boxed::Box<T> {
     }
 }
 
+#[cfg(feature = "alloc")]
+impl<'b, T: Decode<'b>> Decode<'b> for alloc::rc::Rc<T> {
+    fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
+        T::decode(d).map(alloc::rc::Rc::new)
+    }
+}
+
+impl<'b, T: Decode<'b>> Decode<'b> for core::cell::RefCell<T> {
+    fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
+        T::decode(d).map(core::cell::RefCell::new)
+    }
+}
+
+
 impl<'a, 'b: 'a> Decode<'b> for &'a str {
     fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
         d.str()
