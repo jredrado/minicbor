@@ -204,28 +204,28 @@ impl<'b> Decode<'b> for usize {
     }
 }
 
-#[cfg(not(feature = "std"),target_pointer_width = "32")]
+#[cfg(all(not(feature = "std"),target_pointer_width = "32"))]
 impl<'b> Decode<'b> for core::num::NonZeroUsize {
     fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
         d.u32().and_then(|n| core::num::NonZeroUsize::new(n as usize).ok_or_else(|| Error::Message("NonZeroSize creation error")))
     }
 }
 
-#[cfg(not(feature = "std"),target_pointer_width = "64")]
+#[cfg(all(not(feature = "std"),target_pointer_width = "64"))]
 impl<'b> Decode<'b> for core::num::NonZeroUsize {
     fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
         d.u64().and_then(|n| core::num::NonZeroUsize::new(n as usize).ok_or_else(|| Error::Message("NonZeroSize creation error")))
     }
 }
 
-#[cfg(feature = "std",target_pointer_width = "32")]
+#[cfg(all(feature = "std",target_pointer_width = "32"))]
 impl<'b> Decode<'b> for std::num::NonZeroUsize {
     fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
         d.u32().and_then(|n| std::num::NonZeroUsize::new(n as usize).ok_or_else(|| Error::Message("NonZeroSize creation error")))
     }
 }
 
-#[cfg(feature = "std",target_pointer_width = "64")]
+#[cfg(all(feature = "std",target_pointer_width = "64"))]
 impl<'b> Decode<'b> for std::num::NonZeroUsize {
     fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
         d.u64().and_then(|n| std::num::NonZeroUsize::new(n as usize).ok_or_else(|| Error::Message("NonZeroSize creation error")))
