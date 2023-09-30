@@ -219,20 +219,6 @@ impl<'b> Decode<'b> for core::num::NonZeroUsize {
 }
 
 #[cfg(target_pointer_width = "32")]
-impl<'b> Decode<'b> for std::num::NonZeroUsize {
-    fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
-        d.u32().and_then(|n| core::num::NonZeroUsize::new(n as usize).ok_or_else(|| Error::Message("NonZeroSize creation error")))
-    }
-}
-
-#[cfg(target_pointer_width = "64")]
-impl<'b> Decode<'b> for std::num::NonZeroUsize {
-    fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
-        d.u64().and_then(|n| core::num::NonZeroUsize::new(n as usize).ok_or_else(|| Error::Message("NonZeroSize creation error")))
-    }
-}
-
-#[cfg(target_pointer_width = "32")]
 impl<'b> Decode<'b> for isize {
     fn decode(d: &mut Decoder<'b>) -> Result<Self, Error> {
         d.i32().map(|n| n as isize)
