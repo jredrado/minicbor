@@ -172,20 +172,6 @@ impl Encode for core::num::NonZeroUsize {
 }
 
 #[cfg(target_pointer_width = "32")]
-impl Encode for std::num::NonZeroUsize {
-    fn encode<W: Write>(&self, e: &mut Encoder<W>) -> Result<(), Error<W::Error>> {
-        e.u32(self.get() as u32)?.ok()
-    }
-}
-
-#[cfg(target_pointer_width = "64")]
-impl Encode for std::num::NonZeroUsize {
-    fn encode<W: Write>(&self, e: &mut Encoder<W>) -> Result<(), Error<W::Error>> {
-        e.u64(self.get() as u64)?.ok()
-    }
-}
-
-#[cfg(target_pointer_width = "32")]
 impl Encode for isize {
     fn encode<W: Write>(&self, e: &mut Encoder<W>) -> Result<(), Error<W::Error>> {
         e.i32(*self as i32)?.ok()
